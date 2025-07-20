@@ -3,11 +3,15 @@ const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT;
 const path = require("node:path");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
-const pool = require("./pool");
+const session = require("express-session");
+const pool = require("./models/pool");
+const indexController = require("./controllers/indexController");
+const signupController = require("./controllers/signupController");
+const loginController = require("./controllers/loginController");
+const joinController = require("./controllers/joinController");
+const newMessageController = require("./controllers/newMessageController");
 
+// connecting sessions table
 app.use(
   session({
     store: new (require("connect-pg-simple")(session))({
@@ -19,17 +23,29 @@ app.use(
     cookie: { maxAge: 2 * 24 * 60 * 60 * 1000 }, // 2 Days
   }),
 );
-app.use(passport.session());
+
 app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+require("./config/passport.js");
+// trick to access currentUser in views
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
 
 // routes
+app.get("/", indexController.getHome);
+app.get(/\/sign-up/i, signupController.getSignup);
+app.post(/\/sign-up/i, signupController.postSignup);
+app.get(/\/login/i, loginController.getLogin);
+app.post(/\/login/i, loginController.postLogin);
+app.get(/\/join/i, joinController.getJoin);
+app.post(/\/join/i, joinController.postJoin);
+app.get(/\/new-message/i, newMessageController.getNewMessage);
+app.post(/\/new-message/i, newMessageController.postNewMessage);
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.statusCode || 500).send(err.message);
