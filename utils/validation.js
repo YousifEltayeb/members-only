@@ -1,40 +1,75 @@
 const { body, validationResult } = require("express-validator");
-const yearErr = "must be a number between 1940 and 2026";
-const priceErr = "must be a number between 1000$ and 5000000$";
+const model = require("../models/queries");
 const alphaErr = "must only contain letters.";
+const emailErr = "must be a valid email";
+const passwordErr = "must be at least 8 characters";
+const emptyErr = "cannot be empty";
+const existErr = "field must exist";
 
-const validateCar = [
-  body("model").trim(),
-  body("year")
+const validateSignup = [
+  body("firstName")
+    .exists()
+    .withMessage(`First name ${existErr}`)
+    .bail()
     .trim()
-    .isInt({ min: 1940, max: 2026 })
-    .withMessage(`Year ${yearErr}`),
-  body("price")
-    .trim()
-    .isInt({ min: 1000, max: 5000000 })
-    .withMessage(`Price ${priceErr}`),
-  body("type")
-    .trim()
+    .notEmpty()
+    .withMessage(`First name ${emptyErr}`)
+    .bail()
     .isAlpha("en-US", { ignore: " " })
-    .withMessage(`Type ${alphaErr}`),
-  body("brand")
+    .withMessage(`First Name ${alphaErr}`),
+  ,
+  body("lastName")
+    .exists()
+    .withMessage(`Last name ${existErr}`)
+    .bail()
     .trim()
+    .notEmpty()
+    .withMessage(`Last name ${emptyErr}`)
+    .bail()
     .isAlpha("en-US", { ignore: " " })
-    .withMessage(`Brand ${alphaErr}`),
+    .withMessage(`Last Name ${alphaErr}`),
+  body("email")
+    .exists()
+    .withMessage(`Email ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Email ${emptyErr}`)
+    .bail()
+    .isEmail()
+    .withMessage(`Email ${emailErr}`)
+    .custom(async (value) => {
+      const user = await model.findUserByEmail(value);
+      if (user) {
+        throw new Error("Email is already used");
+      }
+    }),
+
+  body("password")
+    .exists()
+    .withMessage(`Password ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Password ${emptyErr}`)
+    .bail()
+    .isLength({ min: 8 })
+    .withMessage(`Password ${passwordErr}`),
+  body("confirmPassword")
+    .exists()
+    .withMessage(`Password Confimation ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Password Confimation ${emptyErr}`)
+    .bail()
+    .custom((value, { req }) => {
+      return value === req.body.password;
+    })
+    .withMessage(`Passwords must match`),
 ];
 
-const validateType = body("name")
-  .trim()
-  .isAlpha("en-US", { ignore: " " })
-  .withMessage(`Name ${alphaErr}`);
-const validateBrand = body("name")
-  .trim()
-  .isAlpha("en-US", { ignore: " " })
-  .withMessage(`Name ${alphaErr}`);
-
 module.exports = {
-  validateCar,
-  validateType,
-  validateBrand,
+  validateSignup,
   validationResult,
 };

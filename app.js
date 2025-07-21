@@ -3,6 +3,9 @@ const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT;
 const path = require("node:path");
+const session = require("express-session");
+const pool = require("./models/pool");
+const passport = require("passport");
 const indexController = require("./controllers/indexController");
 const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
@@ -13,7 +16,21 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// auth and session config
+// connecting sessions table
+app.use(
+  session({
+    store: new (require("connect-pg-simple")(session))({
+      pool: pool,
+    }),
+    secret: process.env.COCKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }, // 7 Days
+  }),
+);
+app.use(passport.session());
+
+// auth config
 require("./config/passport.js");
 
 // to access currentUser in views
