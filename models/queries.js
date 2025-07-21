@@ -11,11 +11,18 @@ async function findUserById(id) {
   const { rows } = await pool.query(`SELECT * FROM users WHERE id = $1`, [id]);
   return rows[0];
 }
-async function insertUser(email, hashedPassword, firstName, lastName) {
-  await pool.query(
-    "INSERT INTO users (email, password, first_name, last_name) VALUES($1, $2, $3, $4)",
-    [email, hashedPassword, firstName, lastName],
-  );
+async function insertUser(email, hashedPassword, firstName, lastName, admin) {
+  if (admin === "on") {
+    await pool.query(
+      "INSERT INTO users (email, password, first_name, last_name, admin_status) VALUES($1, $2, $3, $4, $5)",
+      [email, hashedPassword, firstName, lastName, "true"],
+    );
+  } else {
+    await pool.query(
+      "INSERT INTO users (email, password, first_name, last_name) VALUES($1, $2, $3, $4)",
+      [email, hashedPassword, firstName, lastName],
+    );
+  }
 }
 
 async function approveMember(id) {

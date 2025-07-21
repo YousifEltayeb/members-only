@@ -11,7 +11,4 @@ exports.postLogin = [
     failureRedirect: "/login",
     failureMessage: true,
   }),
-  async (req, res) => {
-    console.log(req.user);
-  },
 ];

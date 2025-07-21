@@ -68,6 +68,11 @@ const validateSignup = [
       return value === req.body.password;
     })
     .withMessage(`Passwords must match`),
+  body("admin")
+    .optional({ values: "falsy" })
+    .custom((value) => {
+      return value === "on";
+    }),
 ];
 
 const validateJoin = [

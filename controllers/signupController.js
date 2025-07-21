@@ -15,9 +15,9 @@ exports.postSignup = [
         errors: errors.array(),
       });
     }
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, admin } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await model.insertUser(email, hashedPassword, firstName, lastName);
-    res.redirect("/");
+    await model.insertUser(email, hashedPassword, firstName, lastName, admin);
+    res.redirect("/login");
   },
 ];
