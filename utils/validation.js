@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+require("dotenv").config();
 const model = require("../models/queries");
 const alphaErr = "must only contain letters.";
 const emailErr = "must be a valid email";
@@ -69,7 +70,22 @@ const validateSignup = [
     .withMessage(`Passwords must match`),
 ];
 
+const validateJoin = [
+  body("passcode")
+    .exists()
+    .withMessage(`Passcode ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Passcode ${emptyErr}`)
+    .bail()
+    .custom((value) => {
+      return value === process.env.PASSCODE;
+    })
+    .withMessage(`Passcode does not match`),
+];
 module.exports = {
   validateSignup,
+  validateJoin,
   validationResult,
 };

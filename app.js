@@ -9,6 +9,7 @@ const passport = require("passport");
 const indexController = require("./controllers/indexController");
 const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
+const logoutController = require("./controllers/logoutController");
 const joinController = require("./controllers/joinController");
 const newMessageController = require("./controllers/newMessageController");
 
@@ -31,7 +32,7 @@ app.use(
 app.use(passport.session());
 
 // auth config
-require("./config/passport.js");
+require("./config/passport");
 
 // to access currentUser in views
 app.use((req, res, next) => {
@@ -45,6 +46,7 @@ app.get(/\/sign-up/i, signupController.getSignup);
 app.post(/\/sign-up/i, signupController.postSignup);
 app.get(/\/login/i, loginController.getLogin);
 app.post(/\/login/i, loginController.postLogin);
+app.get(/\/logout/i, logoutController.getLogout);
 app.get(/\/join/i, joinController.getJoin);
 app.post(/\/join/i, joinController.postJoin);
 app.get(/\/new-message/i, newMessageController.getNewMessage);
