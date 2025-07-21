@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 
 // routes
 app.get("/", indexController.getHome);
+app.post("/:messageId/:userId/delete", indexController.postDeleteMessage);
 app.get(/\/sign-up/i, signupController.getSignup);
 app.post(/\/sign-up/i, signupController.postSignup);
 app.get(/\/login/i, loginController.getLogin);

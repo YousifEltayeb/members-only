@@ -3,8 +3,11 @@ const passport = require("passport");
 const { validateLogin, validationResult } = require("../utils/validation");
 
 exports.getLogin = async (req, res) => {
-  const err = req.session.messages.pop();
-  res.render("login", { loginError: err });
+  if (req.session.messages) {
+    const err = req.session.messages.pop();
+    return res.render("login", { loginError: err });
+  }
+  res.render("login");
 };
 exports.postLogin = [
   validateLogin,

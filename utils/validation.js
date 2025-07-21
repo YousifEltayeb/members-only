@@ -88,16 +88,6 @@ const validateJoin = [
       return value === process.env.PASSCODE;
     })
     .withMessage(`Passcode does not match`),
-  body("password")
-    .exists()
-    .withMessage(`Password ${existErr}`)
-    .bail()
-    .trim()
-    .notEmpty()
-    .withMessage(`Password ${emptyErr}`)
-    .bail()
-    .isLength({ min: 8 })
-    .withMessage(`Password ${passwordErr}`),
 ];
 
 const validateMessage = [
