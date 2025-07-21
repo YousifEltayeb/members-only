@@ -88,9 +88,65 @@ const validateJoin = [
       return value === process.env.PASSCODE;
     })
     .withMessage(`Passcode does not match`),
+  body("password")
+    .exists()
+    .withMessage(`Password ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Password ${emptyErr}`)
+    .bail()
+    .isLength({ min: 8 })
+    .withMessage(`Password ${passwordErr}`),
+];
+
+const validateMessage = [
+  body("message")
+    .exists()
+    .withMessage(`message ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`message ${emptyErr}`)
+    .isLength({ min: 8, max: 100 })
+    .isString(),
+  body("title")
+    .exists()
+    .withMessage(`title ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`title ${emptyErr}`)
+    .isLength({ min: 8, max: 100 })
+    .isString(),
+];
+
+const validateLogin = [
+  body("email")
+    .exists()
+    .withMessage(`Email ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Email ${emptyErr}`)
+    .bail()
+    .isEmail()
+    .withMessage(`Email ${emailErr}`),
+  body("password")
+    .exists()
+    .withMessage(`Password ${existErr}`)
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage(`Password ${emptyErr}`)
+    .bail()
+    .isLength({ min: 8 })
+    .withMessage(`Password ${passwordErr}`),
 ];
 module.exports = {
   validateSignup,
   validateJoin,
+  validateMessage,
+  validateLogin,
   validationResult,
 };

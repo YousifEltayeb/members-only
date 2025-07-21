@@ -6,6 +6,26 @@
     <title>New message</title>
   </head>
   <body>
+    <% if(currentUser) { %>
     <h1>Write a new message</h1>
+    <br />
+    <%- include("validationErrors.ejs") %>
+    <br />
+    <form action="/new-message" method="POST">
+      <label for="title">Title:</label>
+      <input type="text" name="title" id="title" />
+      <br />
+      <br />
+      <label for="message">Message:</label>
+      <input type="text" id="message" name="message" required />
+      <br />
+      <br />
+      <button type="submit">Submit</button>
+    </form>
+    <% } else {%>
+    <h1>Please <a href="/sign-up">Sign Up from here</a></h1>
+    <br /><br /><br />
+    <h1>if you already have an account <a href="/login">Login from here</a></h1>
+    <% } %>
   </body>
 </html>

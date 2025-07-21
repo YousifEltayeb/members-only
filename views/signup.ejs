@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Sign up</h1>
-    <%- include("errors.ejs") %>
+    <%- include("validationErrors.ejs") %>
     <form action="/sign-up" method="POST">
       <label for="firstName">First name:</label>
       <input type="text" name="firstName" id="firstName" required />
@@ -40,5 +40,8 @@
       <br />
       <button type="submit">Register</button>
     </form>
+    <br />
+    <br />
+    If you have an account,<a href="/sign-up"> login here</a>
   </body>
 </html>

@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Enter the super secret passcode to join the club</h1>
-    <%- include("errors.ejs") %> <% if(currentUser) { %>
+    <%- include("validationErrors.ejs") %> <% if(currentUser) { %>
     <form action="/join" method="POST">
       <label for="passcode">Enter Passcode</label>
       <input type="text" name="passcode" id="passcode" required />

@@ -30,4 +30,16 @@ async function approveMember(id) {
     id,
   ]);
 }
-module.exports = { findUserByEmail, findUserById, insertUser, approveMember };
+async function insertMessage(title, message, userId) {
+  await pool.query(
+    `INSERT INTO messages (title, message, author_id) VALUES($1, $2, $3)`,
+    [title, message, userId],
+  );
+}
+module.exports = {
+  findUserByEmail,
+  findUserById,
+  insertUser,
+  approveMember,
+  insertMessage,
+};

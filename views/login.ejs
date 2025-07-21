@@ -10,7 +10,9 @@
     <h1>You are already logged in</h1>
     <% } else {%>
     <h1>Login</h1>
-    <%- include("errors.ejs") %>
+    <br />
+    <%- include("validationErrors.ejs") %> <%- include("loginErrors.ejs") %>
+    <br />
     <form action="/login" method="POST">
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" required />
@@ -20,6 +22,8 @@
 
       <button type="submit">Login</button>
     </form>
-    <% } %>
+    <br />
+    <br />
+    <% } %> If you don't have an account,<a href="/sign-up"> sign up here</a>
   </body>
 </html>
